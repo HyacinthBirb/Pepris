@@ -8,7 +8,7 @@
 #include <sys/ioctl.h>
 #include <signal.h>
 
-// This is made by the Birb using Vive coding becous my flight is in 5 minutes
+// This is made by the Birb using Vibe coding becous my flight is in 5 minutes
 // Since its shit, im making it open source and well, you the internet can fix this completly broken Tetris* (or as I call, Pepris)
 // Current version is
 
