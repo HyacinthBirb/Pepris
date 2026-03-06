@@ -1,0 +1,1 @@
+int gamemode_1();
