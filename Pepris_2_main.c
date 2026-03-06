@@ -24,9 +24,11 @@ int main(void) {
     }
 
     if (game_option[0] == '1') {
-        // Game type 1
+        GameState state = {0};
+        gamemode_1(&state);
     } else if (game_option[0] == '2') {
-        // Game type 2
+        GameState state = {0};
+        gamemode_2(&state);
     }
 
     return 0;

@@ -1,58 +1,90 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
-#include <time.h>
+#include "gamemode_1.h"
 
-#define BOARD_WIDTH 10
-#define BOARD_HEIGHT 10
-#define TICK_MS 500
+// this is game type 1 with manual drop
 
-// this is game type 1
-// Manaul Drop with no auto drop
+static struct termios orig;
 
-struct termios orig;
+// function delceration
+static void handle_input(GameState *state, char input);
+static void show_cursor(void);
+static void hide_cursor(void);
 
-int gamemode_1(void) {
-	int running  = 1;
-	int piece_x  = BOARD_WIDTH  / 2;
-	int piece_y  = BOARD_HEIGHT / 2;
-	int dx = 0, dy = 0;
+static int pieces[7][4][4] = {
+    // I
+    { {0,0,0,0},
+      {1,1,1,1},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-	struct timespec last, now;
-	clock_gettime(CLOCK_MONOTONIC, &last);
+    // O
+    { {0,1,1,0},
+      {0,1,1,0},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-	// Basic Game control
-	while (running) {
-		char c;
-		if (read(STDIN_FILENO, &c, 1) == 1) {
-			switch (c) {
-				case 'w': dy = -1; dx =  0; break;
-				case 's': dy =  1; dx =  0; break;
-				case 'a': dx = -1; dy =  0; break;
-				case 'd': dx =  1; dy =  0; break;
-				case 'q': running = 0;       break;
-			}
-		}
+    // T
+    { {0,1,0,0},
+      {1,1,1,0},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-		clock_gettime(CLOCK_MONOTONIC, &now);
-		long elapsed = (now.tv_sec  - last.tv_sec)  * 1000000000L
-					 + (now.tv_nsec - last.tv_nsec);
-		if (elapsed >= TICK_NS) {
-			last = now;
+    // S
+    { {0,1,1,0},
+      {1,1,0,0},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-			int new_x = piece_x + dx;
-			int new_y = piece_y + dy;
+    // Z
+    { {1,1,0,0},
+      {0,1,1,0},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-			if (new_x >= 0 && new_x < BOARD_WIDTH)  piece_x = new_x;
-			if (new_y >= 0 && new_y < BOARD_HEIGHT)  piece_y = new_y;
+    // J
+    { {1,0,0,0},
+      {1,1,1,0},
+      {0,0,0,0},
+      {0,0,0,0} },
 
-			dx = 0;
-			dy = 0;
+    // L
+    { {0,0,1,0},
+      {1,1,1,0},
+      {0,0,0,0},
+      {0,0,0,0} }
+};
 
-			// Render will be here!
-			render();
-		}
-		usleep(16000);
-	}
-	return 0;
+int gamemode_1(GameState *state) {
+    return state->score;
+}
+
+static void handle_input(GameState *state, char input) {
+    switch (input) {
+        case 'a': case 'A': case ',':
+            break;
+        case 'd': case 'D': case '.':
+            break;
+        case 'w': case 'W': case ';':
+            break;
+        case 's': case 'S': case '/':
+            break;
+        case 'p': case 'P':
+            state->paused = !state->paused;
+            break;
+        case 'q': case 'Q':
+            state->game_over = 1;
+            break;
+    }
+}
+
+static void show_cursor(void) {
+    printf("\033[?25h");
+    fflush(stdout);
+}
+
+static void hide_cursor(void) {
+    printf("\033[?25l");
+    fflush(stdout);
 }

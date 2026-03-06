@@ -1,4 +1,7 @@
+#include "gamemode_2.h"
 
+// GameMode two, auto drop
 
-// this is game type 2
-
+int gamemode_2(GameState *state) {
+    return state->score;
+}
