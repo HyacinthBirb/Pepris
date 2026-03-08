@@ -57,6 +57,12 @@ static int pieces[7][4][4] = {
 };
 
 int gamemode_1(GameState *state) {
+    while (!state->game_over) {
+        // add draw game here later
+
+        // input handle
+        char input;
+    }
     return state->score;
 }
 
@@ -76,6 +82,13 @@ static void handle_input(GameState *state, char input) {
         case 'q': case 'Q':
             state->game_over = 1;
             break;
+    }
+}
+
+void input_handle_test(GameState *state) {
+    char input;
+    if (input == 'a') {
+        printf ("Test = Input a");
     }
 }
 
